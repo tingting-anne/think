@@ -1,0 +1,74 @@
+#ifndef _THINK_UTILS_
+#define _THINK_UTILS_
+#include <errno.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdio.h>
+
+inline int log2i(unsigned int x)
+{
+	int r = 31;
+
+	if (!x)
+		return 0;
+	if (!(x & 0xffff0000u)) {
+		x <<= 16;
+		r -= 16;
+	}
+	if (!(x & 0xff000000u)) {
+		x <<= 8;
+		r -= 8;
+	}
+	if (!(x & 0xf0000000u)) {
+		x <<= 4;
+		r -= 4;
+	}
+	if (!(x & 0xc0000000u)) {
+		x <<= 2;
+		r -= 2;
+	}
+	if (!(x & 0x80000000u)) {
+		x <<= 1;
+		r -= 1;
+	}
+	return r;
+}
+
+inline int linux_system(const char* command)
+{
+	if (command == NULL)
+	{
+		return (1);
+	}
+
+	int status = -1;
+	pid_t pid = vfork();
+
+	if (pid < 0)
+	{
+		printf("vfork() failed>>>>\n");
+		status = -1;
+	}
+	else if (pid == 0)
+	{
+		printf("inclild ppid=%d pid=%d>>>>>\n", getppid(), getpid());
+		execl("/bin/sh", "sh", "-c", command, (char*)0);
+		_exit(127);	// 子进程执行正常则不会执行此语句
+	}
+	else
+	{
+		//tracef("in parent pid =%d>>>>\n", getppid());
+		while (waitpid(pid, &status, 0) < 0)
+		{
+			if (errno != EINTR)
+			{
+				status = -1;
+				break;
+			}
+		}
+	}
+
+	return status;
+}
+#endif //_THINK_UTILS_H_

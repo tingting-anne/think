@@ -1,0 +1,25 @@
+#2012/7/1   yjhjstz@163.com
+
+#CROSS = 
+
+CPP	= @echo " g++ $@"; $(CROSS)g++
+CC	= @echo " gcc $@"; $(CROSS)gcc
+LD	= @echo " ld  $@"; $(CROSS)ld
+AR  = @echo " ar  $@"; $(CROSS)ar
+RM	= @echo " RM	$@"; rm -f
+STRIP	= @echo " strip  $@"; $(CROSS)strip
+
+CFLAGS	+= -I ./include
+CFLAGS += -Wall -O -g
+CFLAGS += -D_REENTRANT #-DLINUX
+
+LDFLAGS += -lpthread -static
+
+AFLAGS += -r
+
+LIBDIR = ./Lib/x86
+
+BINDIR = ./Bin/x86
+
+
+
