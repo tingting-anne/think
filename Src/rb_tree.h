@@ -1,8 +1,6 @@
 #ifndef __KERN_LIBS_RB_TREE_H__
 #define __KERN_LIBS_RB_TREE_H__
 
-#include <types.h>
-
 typedef struct rb_node {
     bool red;                           // if red = 0, it's a black node
     struct rb_node *parent;

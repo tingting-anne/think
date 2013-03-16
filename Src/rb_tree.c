@@ -1,14 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <slab.h>
 #include <rb_tree.h>
 #include <assert.h>
-
+#include "list.h"
 /* rb_node_create - create a new rb_node */
 static inline rb_node *
 rb_node_create(void) {
-    return kmalloc(sizeof(rb_node));
+    return malloc(sizeof(rb_node));
 }
 
 /* rb_tree_empty - tests if tree is empty */
@@ -33,7 +32,7 @@ rb_tree_create(int (*compare)(rb_node *node1, rb_node *node2)) {
     rb_tree *tree;
     rb_node *nil, *root;
 
-    if ((tree = kmalloc(sizeof(rb_tree))) == NULL) {
+    if ((tree = malloc(sizeof(rb_tree))) == NULL) {
         goto bad_tree;
     }
 
@@ -57,9 +56,9 @@ rb_tree_create(int (*compare)(rb_node *node1, rb_node *node2)) {
     return tree;
 
 bad_node_cleanup_nil:
-    kfree(nil);
+    free(nil);
 bad_node_cleanup_tree:
-    kfree(tree);
+    free(tree);
 bad_tree:
     return NULL;
 }
@@ -330,9 +329,9 @@ rb_delete(rb_tree *tree, rb_node *node) {
 /* rb_tree_destroy - destroy a tree and free memory */
 void
 rb_tree_destroy(rb_tree *tree) {
-    kfree(tree->root);
-    kfree(tree->nil);
-    kfree(tree);
+    free(tree->root);
+    free(tree->nil);
+    free(tree);
 }
 
 /* *
@@ -405,8 +404,8 @@ check_tree(rb_tree *tree, rb_node *node) {
 }
 
 static void *
-check_safe_kmalloc(size_t size) {
-    void *ret = kmalloc(size);
+check_safe_malloc(size_t size) {
+    void *ret = malloc(size);
     assert(ret != NULL);
     return ret;
 }
@@ -417,7 +416,7 @@ struct check_data {
 };
 
 #define rbn2data(node)              \
-    (to_struct(node, struct check_data, rb_link))
+    (list_entry(node, struct check_data, rb_link))
 
 static inline int
 check_compare1(rb_node *node1, rb_node *node2) {
@@ -438,15 +437,15 @@ check_rb_tree(void) {
     assert(!nil->red && root->left == nil);
 
     int total = 1000;
-    struct check_data **all = check_safe_kmalloc(sizeof(struct check_data *) * total);
+    struct check_data **all = check_safe_malloc(sizeof(struct check_data *) * total);
 
     long i;
     for (i = 0; i < total; i ++) {
-        all[i] = check_safe_kmalloc(sizeof(struct check_data));
+        all[i] = check_safe_malloc(sizeof(struct check_data));
         all[i]->data = i;
     }
 
-    int *mark = check_safe_kmalloc(sizeof(int) * total);
+    int *mark = check_safe_malloc(sizeof(int) * total);
     memset(mark, 0, sizeof(int) * total);
 
     for (i = 0; i < total; i ++) {
@@ -519,10 +518,10 @@ check_rb_tree(void) {
     rb_tree_destroy(tree);
 
     for (i = 0; i < total; i ++) {
-        kfree(all[i]);
+        free(all[i]);
     }
 
-    kfree(mark);
-    kfree(all);
+    free(mark);
+    free(all);
 }
 
