@@ -35,7 +35,7 @@ bool CTime::m_12hour = false;
 static uint64 m_tickoffs = 0;	//tick计数校正
 
 const CTime CTime::minTime(2000, 1, 1, 0, 0, 0);
-const CTime CTime::maxTime(2038, 1, 1, 0, 0, 0);
+const CTime CTime::maxTime(2063, 1, 1, 0, 0, 0);
 
 
 CTime::CTime()
