@@ -3,13 +3,13 @@
 
 include ./config-x86
 
-LIB_OBJS =	Src/file.o  \
+LIB_OBJS =	Src/File.o  \
 	Src/Time.o	\
 	Src/utils.o	\
 	Src/unknown.o	\
 	Src/Crc.o	\
 	Src/version.o \
-    Src/PrintLog.o \
+    	Src/PrintLog.o \
 	Src/ThreadPool.o
 
 
