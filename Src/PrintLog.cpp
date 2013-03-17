@@ -11,18 +11,19 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 static int s_printLogLevel = 6;
+static THINK::PrinterProc print_proc;
 
 // 记录上次输出最后一个字符是否是换行，还不完全可靠
 static bool s_returned = true;
 
 inline void print(char const* s)
 {
-	//if (s_print.empty())
-	{
-		// 这里不能使用 printf, 否则处理'%'会出错
+	if (print_proc.empty()){
 		fputs(s, stdout);
 	}
-	
+	else {
+		print_proc(s);
+	}
 }
 
 
@@ -31,6 +32,11 @@ inline void print(char const* s)
 namespace THINK {
 
 
+int setLogPrinter(PrinterProc printer)
+{
+	print_proc = printer;
+	return 0;
+}
 
 
 void setPrintLogLevel(int level)

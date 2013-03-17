@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include "inttype.h"
+#include "Function.h"
 
 enum {
 	COLOR_FATAL = 35,
@@ -38,12 +39,12 @@ namespace THINK{
 
 /// 打印输出回调函数类型
 /// 参数为要打印的字符串
-//typedef TFunction1<void, char const*> LogPrinterProc;
+typedef TFunction1<void, char const*> PrinterProc;
 
 /// 设置打印的输出回调函数
 /// \param [in] printer 输出回调函数, 为空时设置打印输出到标准输出设备
 /// \return 成功返回0, 失败返回-1
-//int setLogPrinter(LogPrinterProc printer);
+int setLogPrinter(PrinterProc printer);
 
 /// 设置打印的级别，高于该级别的打印不能输出
 void setPrintLogLevel(int level);
