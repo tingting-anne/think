@@ -1,7 +1,7 @@
 #ifndef __TIME_WRAPPER_H__
 #define __TIME_WRAPPER_H__
 
-#include "inttype.h"
+#include "types.h"
 #include <string>
 namespace THINK{
 /// 系统时间结构

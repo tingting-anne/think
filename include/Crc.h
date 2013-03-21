@@ -6,7 +6,7 @@
 #define __THINK_CRC_ORDER_H__
 
 #include <stddef.h>
-#include "inttype.h"
+#include "types.h"
 
 
 namespace THINK {

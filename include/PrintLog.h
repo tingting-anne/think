@@ -4,7 +4,7 @@
 #define __THINK_PRINT_LOG_H__
 
 #include <stdio.h>
-#include "inttype.h"
+#include "types.h"
 #include "Function.h"
 
 enum {
