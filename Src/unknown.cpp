@@ -11,7 +11,7 @@ namespace THINK{
 
 struct IUnknown::UnknownInternal
 {
-	atomic_t ref;
+	volatile long int ref;
 	bool isUsing;
 	bool instance;
 
@@ -30,18 +30,17 @@ IUnknown::~IUnknown()
 
 int IUnknown::addRef(void)
 {
-     atomic_add(1, &m_internal->ref);
-	return atomic_read(&m_internal->ref);
+    return atomic_add(&m_internal->ref, 1);
 	
 }
 
 int IUnknown::release(void)
 {
 	//int ref = --m_internal->ref;
-    int ref = atomic_sub(1, &m_internal->ref);
+      int ref = atomic_add(&m_internal->ref,-1);
 	if (ref == 0)
 	{
-       destroy();
+      		 destroy();
 	}
 
 	return ref;
