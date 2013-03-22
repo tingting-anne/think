@@ -11,11 +11,11 @@ namespace THINK{
 
 struct IUnknown::UnknownInternal
 {
-	volatile long int ref;
+	atomic_t ref;
 	bool isUsing;
 	bool instance;
 
-	UnknownInternal() : ref(1), isUsing(false), instance(false) {}
+	UnknownInternal() :  isUsing(false), instance(false) {atomic_set(&ref, 1);}
 };
 
 IUnknown::IUnknown()
@@ -30,14 +30,13 @@ IUnknown::~IUnknown()
 
 int IUnknown::addRef(void)
 {
-    return atomic_add(&m_internal->ref, 1);
+    return atomic_add_return(1,&m_internal->ref);
 	
 }
 
 int IUnknown::release(void)
 {
-	//int ref = --m_internal->ref;
-      int ref = atomic_add(&m_internal->ref,-1);
+	int ref = atomic_sub_return(1, &m_internal->ref);
 	if (ref == 0)
 	{
       		 destroy();
