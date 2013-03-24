@@ -1,5 +1,7 @@
 #include "random.h"
 
+namespace THINK{ 
+
 void Random::_randomize() 
 { 
     _seed=(314159265*_seed+13579)%ULONG_MAX; 
@@ -12,4 +14,5 @@ int Random::_next()
     return int(_seed/2); 
 } 
 
+}
 

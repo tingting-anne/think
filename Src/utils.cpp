@@ -4,7 +4,8 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <stdio.h> 
+#include <stdlib.h>
 
 inline int log2i(unsigned int x)
 {
