@@ -4,7 +4,8 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <stdio.h> 
+#include <stdlib.h>
 
 inline int log2i(unsigned int x)
 {
@@ -71,4 +72,48 @@ inline int linux_system(const char* command)
 
 	return status;
 }
+
+/*ipv4*/
+char * Ip2Str(const unsigned int iIp, char *pStr)
+{
+	unsigned char i;
+	unsigned char cIp[4];
+
+	for (i=0; i<4; i++)
+		cIp[i] = (unsigned char)( (iIp>>(i*8)) & (0xff) );
+
+	sprintf(pStr, "%d.%d.%d.%d", cIp[0], cIp[1], cIp[2], cIp[3]);
+	return pStr;
+}
+
+
+unsigned int Str2Ip(const char *pStr)
+{
+	signed char j = 0;
+	unsigned char cIp;
+	unsigned int uiRet = 0;
+	const char *p = pStr;
+
+	cIp = (unsigned char)atoi(p);
+	uiRet |= ( ((unsigned int)(cIp)) << (j*8) );
+	j++;
+
+	while ( (*p != 0)
+	        && j >= 0)
+	{
+		if (*p != '.')
+		{
+			p++;
+			continue;
+		}
+
+		cIp = (unsigned char)atoi(++p);
+		uiRet |= ( ((unsigned int)(cIp)) << (j*8) );
+		j++;
+
+	}
+
+	return uiRet;
+}
+
 #endif //_THINK_UTILS_H_

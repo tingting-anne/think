@@ -1,7 +1,7 @@
 /*
 **	********************************************************************************
 **                                     pool_allocator
-/*
+**
 **
 **	File		: pool_allocator.h
 **	Description	: 
@@ -20,6 +20,8 @@
 #include "Guard.h"
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// Pool based on Chunk
+namespace THINK {
+
 class Pool
 {
 	struct Link
@@ -153,7 +155,7 @@ public:
 	void destroy(pointer p) { p->~T(); }
 };
 
-	template<class T>Pool pool_allocator<T>::mem(sizeof(T));
+template<class T>Pool pool_allocator<T>::mem(sizeof(T));
 
 template <class T>
 inline bool operator==(const pool_allocator<T>&, 
@@ -169,6 +171,6 @@ inline bool operator!=(const pool_allocator<T>&,
 {
 	return false;
 }
-
+} //end of namespace
 #endif // __POOL_ALLOCATOR_H__
 

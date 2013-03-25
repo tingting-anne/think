@@ -9,10 +9,11 @@ LIB_OBJS =	Src/File.o  \
 	Src/unknown.o	\
 	Src/Crc.o	\
 	Src/version.o \
-    Src/PrintLog.o \
+    	Src/PrintLog.o \
 	Src/ThreadPool.o\
-	Src/hash.o
-
+	Src/hash.o \
+	Src/random.o \
+	Src/pool_allocator.o
 
 LIB_TARGET = $(LIBDIR)/libthink.a
 
