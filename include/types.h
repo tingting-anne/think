@@ -54,4 +54,9 @@ typedef int         BOOL;
 #define NULL                ((void *)0)
 #endif
 
+#ifndef UNUSED
+#define UNUSED(v) ((void)(v))
+#endif
+
+
 #endif //_THINK_TYPES_DEFINE_
