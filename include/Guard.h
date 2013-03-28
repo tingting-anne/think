@@ -13,15 +13,13 @@ public:
 		:m_Mutex(Mutex)
 	{
 		m_Mutex.Enter();
-	//	printf("mutex 0x%p Enter\n", &m_Mutex);
-	};
+	}
 	
 	///\brief Îö¹¹º¯Êı
 	inline ~CGuard()
 	{
 		m_Mutex.Leave();
-	//	printf("mutex 0x%p Leave\n", &m_Mutex);
-	};
+	}
 
 private:
 	CMutex &m_Mutex;
