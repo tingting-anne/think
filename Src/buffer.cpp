@@ -1,5 +1,7 @@
+#include "types.h"
 #include "buffer.h"
 #include <assert.h>
+#include <string.h>
 
 namespace THINK {
 Buffer::Buffer()

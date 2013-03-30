@@ -1,7 +1,26 @@
 #ifndef _BUFFER_H_
 #define _BUFFER_H_
 
-#include "atomic.h"
+//#include "atomic.h"
+/// \code
+///  ===============================================
+///               |
+///          Buffer buffer
+///               |------------+------------------+
+///               |                             
+///               |    
+///               |                           
+///               |     
+///        buffer.reserve(len)         
+///               |      
+///               |           
+///               |        
+///               |                        
+///               |------------+------------------+
+///       buffer.ensureSpace(len)
+///               |
+///    ===============================================
+/// \endcode
 
 namespace THINK {
 
@@ -38,7 +57,7 @@ private:
 	unsigned char	*data;			/* Data head pointer				*/
 	unsigned char	*tail;			/* Tail pointer					*/
 	unsigned char *end;			/* End pointer	*/
-	atomic_t	users;
+	//atomic_t	users;
 };
 
 } //end of namespace

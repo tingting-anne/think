@@ -13,7 +13,8 @@ LIB_OBJS =	Src/File.o  \
 	Src/ThreadPool.o\
 	Src/hash.o \
 	Src/random.o \
-	Src/pool_allocator.o
+	Src/pool_allocator.o \
+	Src/buffer.o
 
 LIB_TARGET = $(LIBDIR)/libthink.a
 
