@@ -51,9 +51,9 @@ bool TCPServer::listen(const char* addr, ushort port)
     // 加入到iocomponents中，及注册可读到socketevent中
     _loop->addComponent(component, true, false);
 
-	_session = component->getSession()；
+	_session = component->getSession();
     // 返回
-    return (component != NULL);
+    return (_session != NULL);
 }
 
 bool TCPServer::postBuffer(Buffer* buf, bool nonblock)
