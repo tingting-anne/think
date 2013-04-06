@@ -31,12 +31,13 @@ bool Session::readData()
 
 bool Session::postPacket(Buffer *output, bool nonblock)
 {
-	return true;
+	
 }
 
 bool Session::handlePacket(Buffer *input)
 {
-	return true;
+	
+	
 }
 
 }

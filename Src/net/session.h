@@ -6,6 +6,8 @@ namespace THINK {
 class Session
 {
 public:
+	typedef TFunction2<bool, Buffer*, bool> DataProc;
+	
 	Session(Socket* socket);
 	
 	virtual ~Session();
@@ -30,12 +32,21 @@ public:
     bool readData();
 
 
-	bool postPacket(Buffer *output, bool nonblock);
+	void setPostPacket(DataProc postdata){
+		_postdata = postdata;
+	}
 
     /*
      * 当数据收到时的处理函数
      */
-    bool handlePacket(Buffer *input);
+    void setHandlePacket(DataProc handledata){
+		_handledata = handledata;
+	}
+
+	bool postPacket(Buffer *output, bool nonblock);
+
+	bool handlePacket(Buffer *input);
+
 private:
 	bool _isServer;                         // 是服务器端
     IOComponent *_iocomponent;
@@ -45,6 +56,8 @@ private:
 	CMsgQueue<Buffer* > _innerQueue;
 	Buffer* _output;      // 输出的buffer
     Buffer* _input;       // 读入的buffer
+    DataProc _postdata;
+	DataProc _handledata; 
 };
 
 }
