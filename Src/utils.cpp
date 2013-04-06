@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdio.h> 
 #include <stdlib.h>
+#include <fcntl.h>
 
 inline int log2i(unsigned int x)
 {
@@ -115,5 +116,27 @@ unsigned int Str2Ip(const char *pStr)
 
 	return uiRet;
 }
+
+int nonblock(int fd)
+{
+	int	ret = -1;
+#if defined(WIN32)
+	unsigned long	on = 1;
+
+	return (ioctlsocket(fd, FIONBIO, &on));
+#else
+	int	flags;
+
+	if ((flags = fcntl(fd, F_GETFL, 0)) == -1)
+		printf("nonblock: fcntl(F_GETFL): %d", errno);
+	else if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) != 0)
+		printf("nonblock: fcntl(F_SETFL): %d", errno);
+	else
+		ret = 0;	/* Success */
+
+	return (ret);
+#endif 
+}
+
 
 #endif //_THINK_UTILS_H_

@@ -14,7 +14,15 @@ LIB_OBJS =	Src/File.o  \
 	Src/hash.o \
 	Src/random.o \
 	Src/pool_allocator.o \
-	Src/buffer.o
+	Src/buffer.o \
+	Src/net/eventloop.o \
+	Src/net/listen.o \
+	Src/net/iocomponent.o \
+	Src/net/session.o \
+	Src/net/sock.o \
+	Src/net/sockevent.o \
+	Src/net/tcpcomponent.o \
+	Src/net/tcpclient.o
 
 LIB_TARGET = $(LIBDIR)/libthink.a
 
