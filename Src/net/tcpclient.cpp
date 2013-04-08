@@ -27,30 +27,30 @@ bool TCPClient::stop()
 
 bool TCPClient::connect(const char* addr, ushort port)
 {
-		Socket *socket = new Socket();
+	Socket *socket = new Socket();
 
-        if (!socket->setAddr(addr, port)) {
-            delete socket;
-            return false;
-        }
+	if (!socket->setAddr(addr, port)) {
+	    delete socket;
+	    return false;
+	}
 
-        // TCPComponent
-        TCPComponent *component = new TCPComponent(_loop, socket);
-       
-        if (!component->init()) {
-            delete component;
-            logInfo("初始化失败TCPComponent: %s:%d", addr, port);
-            return false;
-        }
+	// TCPComponent
+	TCPComponent *component = new TCPComponent(_loop, socket);
 
-        // 加入到iocomponents中，及注册可写到socketevent中
-        _loop->addComponent(component, true, true);
-        component->addRef();
+	if (!component->init()) {
+	    delete component;
+	    logInfo("初始化失败TCPComponent: %s:%d", addr, port);
+	    return false;
+	}
 
-        _session = component->getSession();
-		_session->setHandlePacket(Session::DataProc(&TCPClient::handleBuffer, this));
-		_session->setPostPacket(Session::DataProc(&TCPClient::postBuffer, this));
-		return (_session != NULL);
+	// 加入到iocomponents中，及注册可写到socketevent中
+	_loop->addComponent(component, true, true);
+	component->addRef();
+
+	_session = component->getSession();
+	_session->setHandlePacket(Session::DataProc(&TCPClient::handleBuffer, this));
+	_session->setPostPacket(Session::DataProc(&TCPClient::postBuffer, this));
+	return (_session != NULL);
 }
 
 
@@ -68,14 +68,14 @@ bool TCPClient::disconnect()
     return true;
 }
 
-bool TCPClient::postBuffer(Buffer* buf, bool nonblock)
+bool TCPClient::postBuffer(Session* session, Buffer* buf)
 {
-	return _session->postPacket(buf, nonblock);
+	return true;
 }
 
-bool TCPClient::handleBuffer(Buffer* buf, bool rev)
+bool TCPClient::handleBuffer(Session* session, Buffer* buf)
 {
-	return _session->handlePacket(buf);
+	return true;
 }
 
 

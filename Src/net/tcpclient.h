@@ -5,20 +5,20 @@ class TCPClient
 {
 public:
 	TCPClient();
-	
+
 	virtual ~TCPClient();
 
 	bool start();
 
 	bool stop();
-	
-    bool connect(const char* addr, ushort port);
 
-    bool disconnect();
+	bool connect(const char* addr, ushort port);
 
-	virtual bool postBuffer(Buffer* buf, bool nonblock);
+	bool disconnect();
 
-	virtual bool handleBuffer(Buffer* buf,bool rev);
+	virtual bool postBuffer(Session* session, Buffer* buf);
+
+	virtual bool handleBuffer(Session* session, Buffer* buf);
 private:
 	EventLoop  *_loop;
 	Session * _session;

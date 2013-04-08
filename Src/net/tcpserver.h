@@ -17,9 +17,9 @@ public:
 	
     	bool listen(const char* addr, ushort port);
 
-	virtual bool postBuffer(Buffer* buf, bool nonblock);
+	virtual bool postBuffer(Session* session, Buffer* buf);
 
-	virtual bool handleBuffer(Buffer* buf,bool rev);
+	virtual bool handleBuffer(Session* session, Buffer* buf);
 private:
 	EventLoop  *_loop;
 	Session * _session;

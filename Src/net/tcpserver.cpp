@@ -48,22 +48,22 @@ bool TCPServer::listen(const char* addr, ushort port)
 	    return false;
 	}
 
-    // 加入到iocomponents中，及注册可读到socketevent中
-    _loop->addComponent(component, true, false);
+	// 加入到iocomponents中，及注册可读到socketevent中
+	_loop->addComponent(component, true, false);
 
 	_session = component->getSession();
 	_session->setHandlePacket(Session::DataProc(&TCPServer::handleBuffer, this));
 	_session->setPostPacket(Session::DataProc(&TCPServer::postBuffer, this));
-    // 返回
-    return (_session != NULL);
+	// 返回
+	return (_session != NULL);
 }
 
-bool TCPServer::postBuffer(Buffer* buf, bool nonblock)
+bool TCPServer::postBuffer(Session* session, Buffer* buf)
 {
 	return _session->postPacket(buf, nonblock);
 }
 
-bool TCPServer::handleBuffer(Buffer* buf)
+bool TCPServer::handleBuffer(Session* session, Buffer* buf)
 {
 	return _session->handlePacket(buf);
 }

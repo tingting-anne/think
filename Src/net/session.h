@@ -6,7 +6,7 @@ namespace THINK {
 class Session
 {
 public:
-	typedef TFunction2<bool, Buffer*, bool> DataProc;
+	typedef TFunction2<bool, Session*, Buffer*> DataProc;
 	
 	Session(Socket* socket);
 	
