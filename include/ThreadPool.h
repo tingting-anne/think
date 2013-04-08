@@ -1,7 +1,7 @@
 #ifndef __THREADPOOL_H__
 #define __THREADPOOL_H__
 
-#include "Semaphore.h"
+#include "sem.h"
 #include "mutex.h"
 #include "thread.h"
 #include "condition.h"
@@ -9,7 +9,7 @@
 #include <set>
 #include <string>
 /**  
-//�̳߳�
+//�̳߳�
 **/ 
 class ITask; 
 
