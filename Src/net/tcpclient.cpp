@@ -48,7 +48,8 @@ bool TCPClient::connect(const char* addr, ushort port)
         component->addRef();
 
         _session = component->getSession();
-
+		_session->setHandlePacket(Session::DataProc(&TCPClient::handleBuffer, this));
+		_session->setPostPacket(Session::DataProc(&TCPClient::postBuffer, this));
 		return (_session != NULL);
 }
 
@@ -72,7 +73,7 @@ bool TCPClient::postBuffer(Buffer* buf, bool nonblock)
 	return _session->postPacket(buf, nonblock);
 }
 
-bool TCPClient::handleBuffer(Buffer* buf)
+bool TCPClient::handleBuffer(Buffer* buf, bool rev)
 {
 	return _session->handlePacket(buf);
 }

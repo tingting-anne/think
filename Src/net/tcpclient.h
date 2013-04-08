@@ -6,7 +6,7 @@ class TCPClient
 public:
 	TCPClient();
 	
-	~TCPClient();
+	virtual ~TCPClient();
 
 	bool start();
 
@@ -18,7 +18,7 @@ public:
 
 	virtual bool postBuffer(Buffer* buf, bool nonblock);
 
-	virtual bool handleBuffer(Buffer* buf);
+	virtual bool handleBuffer(Buffer* buf,bool rev);
 private:
 	EventLoop  *_loop;
 	Session * _session;

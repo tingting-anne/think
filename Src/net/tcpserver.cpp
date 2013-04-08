@@ -52,6 +52,8 @@ bool TCPServer::listen(const char* addr, ushort port)
     _loop->addComponent(component, true, false);
 
 	_session = component->getSession();
+	_session->setHandlePacket(Session::DataProc(&TCPServer::handleBuffer, this));
+	_session->setPostPacket(Session::DataProc(&TCPServer::postBuffer, this));
     // ·µ»Ø
     return (_session != NULL);
 }

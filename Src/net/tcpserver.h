@@ -7,7 +7,7 @@ class TCPServer
 public:
 	TCPServer();
 	
-	~TCPServer();
+	virtual  ~TCPServer();
 
 	bool start();
 
@@ -15,11 +15,11 @@ public:
 
 	bool wait();
 	
-    bool listen(const char* addr, ushort port);
+    	bool listen(const char* addr, ushort port);
 
 	virtual bool postBuffer(Buffer* buf, bool nonblock);
 
-	virtual bool handleBuffer(Buffer* buf);
+	virtual bool handleBuffer(Buffer* buf,bool rev);
 private:
 	EventLoop  *_loop;
 	Session * _session;
