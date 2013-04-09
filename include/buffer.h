@@ -1,7 +1,7 @@
 #ifndef _BUFFER_H_
 #define _BUFFER_H_
 
-//#include "atomic.h"
+#include "atomic.h"
 /// \code
 ///  ===============================================
 ///               |
@@ -30,6 +30,9 @@ class Buffer
 public:
 	Buffer();
 	~Buffer();
+	//引用计数
+	int addRef();
+	void release();
 
 	char *getData();
 	int getDataLen();
@@ -57,7 +60,7 @@ private:
 	unsigned char	*data;			/* Data head pointer				*/
 	unsigned char	*tail;			/* Tail pointer					*/
 	unsigned char *end;			/* End pointer	*/
-	//atomic_t	users;
+	atomic_t	_refcount;
 };
 
 } //end of namespace

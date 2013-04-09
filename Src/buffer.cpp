@@ -18,6 +18,20 @@ Buffer::~Buffer()
 	}
 }
 
+int Buffer::addRef() 
+{
+        return atomic_add_return(1, &_refcount);
+}
+
+void Buffer::release()
+{
+	if (atomic_sub_return(1, &_refcount) == 0)
+	{
+		delete this;
+	}
+	
+}
+
 char* Buffer::getData()
 {
 	return (char*)data;
