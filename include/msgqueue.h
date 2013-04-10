@@ -4,7 +4,6 @@
 #include <list>
 #include "types.h"
 #include "mutex.h"
-#include "condition.h"
 #include "pool_allocator.h"
 
 namespace THINK{ 
@@ -15,68 +14,60 @@ class CMsgQueue
 public:
 	typedef std::list<T, pool_allocator<T> > MSGQUEUE;
 	
-	CMsgQueue(int size = 128) : m_cond(m_Mutex)
+	CMsgQueue()
 	{
-		m_nMaxMsg = size;
 		m_nMsg = 0;
 	}
 	~CMsgQueue(){};
 
-	BOOL push(T * msg, int waittime = 0)
+	BOOL push(T* msg)
 	{
 		CGuard guard(m_Mutex);
 	
-		if( m_nMsg >= m_nMaxMsg )
-		{
-			if (!waittime || m_cond.wait(waittime) == false)
-			{
-				return FALSE;
-			}
-			
-		}
-
-		m_msg_queue.push_back(*msg);
+		_queue.push_back(*msg);
 		
 		m_nMsg++;
 
 		return TRUE;
 	}
-	BOOL pop(T * msg_tmp)
+	BOOL pop(T* msg)
 	{
 	
 		CGuard guard(m_Mutex);
 		
-		if( m_msg_queue.empty() )
+		if( _queue.empty() )
 		{
 			return FALSE;
 		}
 
 		assert( m_nMsg );
 
-		*msg_tmp = m_msg_queue.front();
-		m_msg_queue.pop_front();
+		*msg = _queue.front();
+		_queue.pop_front();
 		m_nMsg--;
-		
-		if (m_nMsg <= m_nMaxMsg)
-		{
-			m_cond.broadcast();
-		}
+
 		return TRUE;		
 	}
-
+	
+	void  splice(CMsgQueue<T> &other)
+	{
+		CGuard guard(m_Mutex);
+		other.m_Mutex.Enter();
+		_queue.splice(_queue.end(), other._queue);
+		other.m_Mutex.Leave();
+		
+	}
 	int size()	//获取已有的消息数目
 	{
 		CGuard guard(m_Mutex);
 		return m_nMsg;
 	}
-
+	
 	
 private:
 	int m_nMsg;
-	int m_nMaxMsg;
-	CThreadCond m_cond;
 	CMutex m_Mutex;
-	MSGQUEUE m_msg_queue;
+	MSGQUEUE _queue;
 };
 
 } //end of namespace

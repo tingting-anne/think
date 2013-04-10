@@ -49,14 +49,14 @@ public:
 
 private:
 	bool _isServer;                         // 是服务器端
-    IOComponent *_iocomponent;
-    Socket *_socket;                        // Socket句柄
-    CMsgQueue<Buffer* > _outQueue;
+	IOComponent *_iocomponent;
+	Socket *_socket;                        // Socket句柄
+	CMsgQueue<Buffer* > _outQueue;
 	CMsgQueue<Buffer* > _inQueue;
 	CMsgQueue<Buffer* > _innerQueue;
-	Buffer* _output;      // 输出的buffer
-    Buffer* _input;       // 读入的buffer
-    DataProc _postdata;
+	Buffer _output;      // 输出的buffer
+	Buffer _input;       // 读入的buffer
+	DataProc _postdata;
 	DataProc _handledata; 
 };
 
