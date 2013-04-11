@@ -37,7 +37,7 @@ class TCPClient;
 }
 #include "Function.h"
 #include "atomic.h"
-#include "msgqueue.h"
+#include "mqueue.h"
 #include "buffer.h"
 #include "utils.h"
 #include "sock.h"

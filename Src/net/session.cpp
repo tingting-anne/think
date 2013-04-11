@@ -28,7 +28,7 @@ bool Session::writeData()
 	 	
 		ret = _innerQueue.pop(&buffer);
 
-		if (buffer->getDataLen() == 0 || !ret) {
+		if ( !ret || buffer->getDataLen() == 0) {
 			break;
 		}
 		innerSize --;
@@ -54,11 +54,11 @@ bool Session::readData()
 	int ret = _socket->read(_input.getFree(), _input.getFreeLen());
 	if (ret > 0)
 	{
-		_handledata(this, &_input);
+		handlePacket(&_input);
 	}
 	else if (ret == 0)
 	{
-		
+		//_iocomponent->close();
 	}
 	return ret;
 	
@@ -68,11 +68,18 @@ bool Session::readData()
 bool Session::postPacket(Buffer *output, bool nonblock)
 {
 	
+	_lock.Enter();
+	_outQueue.push(output);
+	if (_iocomponent != NULL && _outQueue.size() == 1U) {
+	_iocomponent->enableWrite(true);
+	}
+	_lock.Leave();
+	return true;
 }
 
 bool Session::handlePacket(Buffer *input)
 {
-	
+	return _handledata(this, input);
 	
 }
 

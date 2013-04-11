@@ -20,11 +20,11 @@ public:
 	}
 	~CMsgQueue(){};
 
-	BOOL push(T* msg)
+	BOOL push(T msg)
 	{
 		CGuard guard(m_Mutex);
 	
-		_queue.push_back(*msg);
+		_queue.push_back(msg);
 		
 		m_nMsg++;
 

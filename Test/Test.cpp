@@ -2,7 +2,7 @@
 #include <assert.h>
 
 #include "Environment.h"
-#include "msgqueue.h"
+#include "mqueue.h"
 
 
 TEST(QueueTest, Initializes) 

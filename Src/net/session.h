@@ -58,6 +58,7 @@ private:
 	Buffer _input;       // ¶ÁÈëµÄbuffer
 	DataProc _postdata;
 	DataProc _handledata; 
+	CMutex  _lock;
 };
 
 }
