@@ -1,6 +1,9 @@
 #ifndef _SESSION_H_
 #define _SESSION_H_
 
+
+#include "condition.h"
+
 namespace THINK {
 
 class Session
@@ -58,7 +61,7 @@ private:
 	Buffer _input;       // ¶ÁÈëµÄbuffer
 	DataProc _postdata;
 	DataProc _handledata; 
-	CMutex  _lock;
+	CThreadCond  _lock;
 };
 
 }

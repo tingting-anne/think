@@ -68,12 +68,12 @@ bool Session::readData()
 bool Session::postPacket(Buffer *output, bool nonblock)
 {
 	
-	_lock.Enter();
+	
 	_outQueue.push(output);
 	if (_iocomponent != NULL && _outQueue.size() == 1U) {
 	_iocomponent->enableWrite(true);
 	}
-	_lock.Leave();
+	
 	return true;
 }
 
