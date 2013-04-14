@@ -60,12 +60,12 @@ bool TCPServer::listen(const char* addr, ushort port)
 
 bool TCPServer::postBuffer(Session* session, Buffer* buf)
 {
-	return _session->postPacket(buf, nonblock);
+	return true;
 }
 
 bool TCPServer::handleBuffer(Session* session, Buffer* buf)
 {
-	return _session->handlePacket(buf);
+	return true;
 }
 
 
