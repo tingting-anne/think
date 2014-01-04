@@ -27,7 +27,7 @@ Overview
 20. atomic (done)
 21. bits operator (done)
 22. consistent hash 
-23. ...
+23. bloom filter 
 
 
 Licence

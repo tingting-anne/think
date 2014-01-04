@@ -16,6 +16,7 @@ LIB_OBJS =	Src/File.o  \
 	Src/random.o \
 	Src/pool_allocator.o \
 	Src/buffer.o \
+	Src/bloom.o \
 	Src/net/eventloop.o \
 	Src/net/listen.o \
 	Src/net/iocomponent.o \
@@ -30,8 +31,9 @@ LIB_TARGET = $(LIBDIR)/libthink.a
 TEST_OBJS = Test/Test.o \
           Test/gtest-all.o \
           Test/TestComponent.o \
-		  Test/hashring.o
-			
+		  Test/hashring.o \
+		  Test/test_bloom.o
+					
 TEST_TARGET = $(BINDIR)/think
 
 TARGET	= $(LIB_TARGET) $(TEST_TARGET)

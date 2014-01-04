@@ -6,20 +6,20 @@
 #define BITS_PER_LONG         32
 #define BITS_PER_BYTE         8
 
-static inline void set_bit(int nr, unsigned long *addr)
+static inline void set_bit(int nr, volatile void *addr)
 {
-	addr[nr / BITS_PER_LONG] |= 1UL << (nr % BITS_PER_LONG);
+	((unsigned char*)addr)[nr / BITS_PER_BYTE] |= 1UL << (nr % BITS_PER_BYTE);
 }
 
-static inline void clear_bit(int nr, unsigned long *addr)
+static inline void clear_bit(int nr, volatile void *addr)
 {
-	addr[nr / BITS_PER_LONG] &= ~(1UL << (nr % BITS_PER_LONG));
+	((unsigned char*)addr)[nr / BITS_PER_BYTE] &= ~(1UL << (nr % BITS_PER_BYTE));
 }
 
-static int test_bit(unsigned int nr, const unsigned long *addr)
+static int test_bit(unsigned int nr, const volatile void *addr)
 {
-	return ((1UL << (nr % BITS_PER_LONG)) &
-		(((unsigned long *)addr)[nr / BITS_PER_LONG])) != 0;
+	return ((1UL << (nr % BITS_PER_BYTE)) &
+		(((unsigned char*)addr)[nr / BITS_PER_BYTE])) != 0;
 }
 
 
