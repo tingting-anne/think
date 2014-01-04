@@ -8,8 +8,9 @@ LIB_OBJS =	Src/File.o  \
 	Src/utils.o	\
 	Src/unknown.o	\
 	Src/Crc.o	\
+	Src/Md5.o \
 	Src/version.o \
-    	Src/PrintLog.o \
+   	Src/PrintLog.o \
 	Src/ThreadPool.o\
 	Src/hash.o \
 	Src/random.o \
@@ -28,8 +29,9 @@ LIB_TARGET = $(LIBDIR)/libthink.a
 
 TEST_OBJS = Test/Test.o \
           Test/gtest-all.o \
-          Test/TestComponent.o
-
+          Test/TestComponent.o \
+		  Test/hashring.o
+			
 TEST_TARGET = $(BINDIR)/think
 
 TARGET	= $(LIB_TARGET) $(TEST_TARGET)

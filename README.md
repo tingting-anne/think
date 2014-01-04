@@ -26,7 +26,8 @@ Overview
 19. template msgqueue (done)
 20. atomic (done)
 21. bits operator (done)
-22. ....
+22. consistent hash 
+23. ...
 
 
 Licence

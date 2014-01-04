@@ -67,8 +67,6 @@ bool Session::readData()
 
 bool Session::postPacket(Buffer *output, bool nonblock)
 {
-	
-	
 	_outQueue.push(output);
 	if (_iocomponent != NULL && _outQueue.size() == 1U) {
 	_iocomponent->enableWrite(true);
