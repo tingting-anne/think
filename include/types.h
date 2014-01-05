@@ -58,5 +58,7 @@ typedef int         BOOL;
 #define UNUSED(v) ((void)(v))
 #endif
 
+#define ARRAYSIZEOF(a) (sizeof(a)/sizeof(a[0]))
+
 
 #endif //_THINK_TYPES_DEFINE_

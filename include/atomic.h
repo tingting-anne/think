@@ -198,5 +198,11 @@ static __inline__ int atomic_add_negative(int i, atomic_t *v)
 	return c;
 }
 
+#define ATOMIC_CAS(val, cmpv, newv) __sync_val_compare_and_swap((val), (cmpv), (newv))
+#define ATOMIC_ADD(val, addv) __sync_add_and_fetch((val), (addv))
+#define ATOMIC_SUB(val, subv) __sync_sub_and_fetch((val), (subv))
+#define ATOMIC_INC(val) __sync_add_and_fetch((val), 1)
+#define ATOMIC_DEC(val) __sync_sub_and_fetch((val), 1)
+
 } //end of namespace
 #endif //_THINK_ATOMIC_H_
