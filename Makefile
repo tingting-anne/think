@@ -1,5 +1,6 @@
 
-#2012/7/1  yjhjstz@163.com
+# 2012/7/1 
+# author: yjhjstz@163.com
 
 include ./config-x86
 
@@ -18,14 +19,7 @@ LIB_OBJS =	Src/File.o  \
 	Src/buffer.o \
 	Src/bloom.o \
 	Src/btree.o \
-	Src/net/eventloop.o \
-	Src/net/listen.o \
-	Src/net/iocomponent.o \
-	Src/net/session.o \
-	Src/net/sock.o \
-	Src/net/sockevent.o \
-	Src/net/tcpcomponent.o \
-	Src/net/tcpclient.o
+
 
 LIB_TARGET = $(LIBDIR)/libthink.a
 
