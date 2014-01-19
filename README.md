@@ -7,7 +7,7 @@ Overview
 --------
 1. crc32 (done)
 2. md5  (done)
-3. hash (done)
+3. hash,hashmap (done)
 4. time (done)
 5. maths (done)
 6. log  (done)

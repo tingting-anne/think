@@ -7,7 +7,7 @@
 class HashFunc
 {
 public:
-    int operator()(const std::string & key )
+    static int hashCode(const std::string & key)
     {
         int hash = 0;
         for(size_t i = 0; i < key.length(); ++i)
@@ -23,7 +23,7 @@ public:
 class EqualKey
 {
 public:
-    bool operator()(const std::string & A ,const std::string & B)
+    static bool equals(const std::string & A ,const std::string & B)
     {
         if(A.compare(B) == 0)
             return true;    //if equal return true

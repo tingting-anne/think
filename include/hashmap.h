@@ -1,10 +1,16 @@
-#ifndef HASHMAP_H_
-#define HASHMAP_H_
+/* 
+ *  HashMap.h 
+ *  Declaration of the members and functions. 
+ *  The type of key,value and the hash function,compare function is defined by users. 
+ *  KeyNode represent the node in the hash table,putting them into the container. 
+ *  Author: luxiaoxun 
+ *  Modified by YJH. 
+ */ 
+#ifndef HASHMAP_H_ 
+#define HASHMAP_H_ 
+ 
+#include "types.h" 
 
-#include "types.h"
-
-//List all the integer number no less than 57 total number is 28
-//And each number is about half of its next number
 static int prime[] =
 {
     57,        97,         193,        389,        769,
@@ -18,193 +24,215 @@ static int prime[] =
 class HashMapUtil
 {
 public:
-    static int find_next_prime(int current)
+    static int findNextPrimeNumber(int current)
     {
         //Find the next prime number by searching in the prime number list
         size_t i = 0;
-        for( ; i < ARRAYSIZEOF(prime); i++ )
+        for( ; i < ARRAYSIZEOF(prime) ; i++)
             if(current < prime[i])
                 break;
         return prime[i];     //return the next larger prime.
     }
 };
 
-template <class Key, class Value, class HashFunc, class EqualKey>
-class HashMap
-{
-private:
-    template <class _Key, class _Value>
-    class KeyNode
-    {
-        public:
-        _Value  value;      //Store the value
-        _Key    key;        //Store the keyword
-        int    used;
-        //if the type of Value/Key is your own class, make sure they can handle copy constructor and operator =
-        KeyNode():used(0){}
-        KeyNode(const KeyNode &other)
-        {
-            value = other.value;
-            key = other.key;
-            used = other.used;
-        }
-        KeyNode & operator=(const KeyNode &other)
-        {
-            if(this == &other) {
-             return *this;
-            }
-            value = other.value;
-            key = other.key;
-            used = other.used;
-            return *this;
-        }
-    };
-
-public:
-       HashMap();
-       ~HashMap();
-       bool insert(const Key& hashKey, const Value& value);
-       bool remove(const Key& hashKey);
-       void rehash();  //use it when rehashing
-       Value& find(const Key& hashKey);
-       const Value& operator [](const Key& hashKey) const;
-       Value& operator [](const Key& hashKey);
-private:
-        int findKey(const Key& hashKey);  //find the index of a key
-private:
-        static const double loadingFactor = 0.9;
-        HashFunc hash;
-        EqualKey equal;
-        KeyNode<Key ,Value> *table;
-        int size;    //current number of itmes
-        int capacity;   //capacity of the array
-       
-  
-};
-
+ 
+/* 
+ *  Inner class of HashMap. 
+ *  Define the node of HashMap. 
+ */ 
+template<class Key, class Value> 
+class KeyNode { 
+public: 
+	//Store the value 
+	Value  value; 
+	//Store the keyword 
+    Key    key; 
+    int removed; 
+}; 
+ 
+template<class Key, class Value, class HashFunc, class EqualKey> 
+class HashMap { 
+public: 
+	HashMap(); 
+	void insert(const Key& hashKey, const Value& value); 
+	bool remove(const Key& hashKey); 
+	void clear(); 
+	Value& find(const Key& hashKey); 
+	Value& operator[](const Key& hashKey); 
+	~HashMap(); 
+private: 
+	//Used as a bucket 
+	KeyNode<Key, Value>* table; 
+	int size; 
+	
+	//Store the number of elements inserted 
+	int num_element; 
+	const static double _loadingFactor = 0.5; 
+	static Value valueNull;
+	int findKey(const Key& hashKey); 
+	KeyNode<Key,Value>* rehash(int size, KeyNode<Key, Value>*&); 
+}; 
 
 template<class Key , class Value , class HashFunc , class EqualKey>
-HashMap<Key, Value, HashFunc, EqualKey>::HashMap()
-{
-    hash = HashFunc();
-    equal = EqualKey();
-    capacity = HashMapUtil::find_next_prime(0); //initialize the capacity with first primer 57
-    //resize the table with capacity because an extra one is used
-    //to return the NULL type of Value in the function find
-    table = new KeyNode<Key,Value>[capacity+1];
-    for(int i = 0 ; i < capacity ; i++)    //initialize the table
-        table[i].used = 0;
-    size = 0;
-}
+Value HashMap<Key, Value, HashFunc, EqualKey>::valueNull = Value();
 
-template<class Key, class Value, class HashFunc, class EqualKey>
-HashMap<Key, Value, HashFunc, EqualKey>::~HashMap()
-{
-    delete []table;
-    table = NULL;
-}
-
-template<class Key, class Value, class HashFunc, class EqualKey>
-bool HashMap<Key, Value, HashFunc, EqualKey>::insert(const Key& hashKey, const Value& value)
-{
-    int index = hash(hashKey)%capacity;
-   
-    if(table[index].used == 1)  //the key-value's hash is unique
-    {
-        return false;
+/** 
+ * Initialize hash table
+ */ 
+template<class Key, class Value, class HashFunc, class EqualKey> 
+HashMap<Key, Value, HashFunc, EqualKey>::HashMap() { 
+	size=HashMapUtil::findNextPrimeNumber(0); 
+	num_element = 0; 
+	//New an array for the KeyNode 
+	table = new KeyNode<Key,Value>[size]; 
+	for ( int i = 0; i < size; i++ ) 
+		// "removed = 1" means this space is empty 
+		table[i].removed = 1; 
+} 
+ 
+/** 
+ * destruction for Hash_Map 
+ */ 
+template<class Key, class Value, class HashFunc, class EqualKey> 
+HashMap<Key, Value, HashFunc, EqualKey>::~HashMap() { 
+	//Empty here. 
+	delete []table; 
+} 
+ 
+/** 
+ * Find the node with assigned key 
+ */ 
+template<class Key, class Value, class HashFunc, class EqualKey> 
+Value& HashMap<Key, Value, HashFunc, EqualKey>::find(const Key& hashKey) { 
+	//Find the index of the key by calling findKey. 
+	int index = findKey(hashKey); 
+	if ( index >= 0 && index < size ) 
+		//Return the copy of the value. 
+		return table[index].value; 
+	else {
+		printf("NOT FOUND!\n");
+		return valueNull;
     }
-    table[index].used = 1;         //modify the KeyNode
-    table[index].key = hashKey;
-    table[index].value = value;
-
-    size++;
-    //if the table's size is too large ,then rehash it
-    if (size >= capacity * loadingFactor)
-        rehash();
-    return true;
-}
-
-template<class Key, class Value, class HashFunc, class EqualKey>
-void HashMap<Key, Value, HashFunc, EqualKey>::rehash()
-{
-    int pastsize = capacity;
-    //create a new array to copy the information in the old table
-    capacity = HashMapUtil::find_next_prime(capacity);
-    KeyNode<Key,Value>* tmp = new KeyNode<Key,Value>[capacity];
-    for(int i = 0 ; i < pastsize ; i++)
-    {
-        if(table[i].used == 1)       //copy the KeyNode into the tmp array
-        {
-            tmp[i] = table[i];
-        }
-    }
-    delete []table; //release the memory of the old table
-
-    table = new KeyNode<Key,Value>[capacity+1];   //resize the table
-    for(int i = 0 ; i < capacity ; i++) //initialize the table
-    {
-        table[i].used = 0;
-    }
-    for(int i = 0 ; i < pastsize ; i++) //insert the item into the table one by one
-    {
-        if(tmp[i].used == 1)
-            insert(tmp[i].key, tmp[i].value);
-    }
-    delete []tmp;               //delete the tmp array
-}
-
-template<class Key, class Value, class HashFunc, class EqualKey>
-bool HashMap<Key, Value, HashFunc, EqualKey>::remove(const Key& hashKey)
-{
-    int index = findKey(hashKey); //find the index of the key
-    if(index < 0) //if find modify the flag with 0,else print out "no such key!"
-    {
-        printf("No such key!\n");
-        return false;
-    }
-    else
-    {
-        table[index].used = 0;
-        size--;
-        return true;
-    }
-}
-
-template<class Key, class Value, class HashFunc, class EqualKey>
-Value& HashMap<Key, Value, HashFunc, EqualKey>::find(const Key& hashKey)
-{
-    int index = findKey(hashKey);
-    if(index < 0) //if index <0 ,not found,else return the index
-    {
-        printf("No such key!\n");
-        return table[capacity].value; //return NULL
-    }
-    else
-    {
-        return table[index].value;
-    }
-}
-
-template<class Key, class Value, class HashFunc, class EqualKey>
-const Value& HashMap<Key, Value, HashFunc, EqualKey>::operator[](const Key& hashKey) const
-{
-    return find(hashKey); //overload the operation to return the value of the element
-}
-
-template<class Key, class Value, class HashFunc, class EqualKey>
-Value& HashMap<Key, Value, HashFunc, EqualKey>::operator[](const Key& hashKey)
-{
-    return find(hashKey); //overload the operation to return the value of the element
-}
-
-template<class Key, class Value, class HashFunc, class EqualKey>
-int HashMap<Key, Value, HashFunc, EqualKey>::findKey(const Key& hashKey)
-{
-    int index = hash(hashKey)%capacity;
-    if ((table[index].used != 1) || !equal(table[index].key,hashKey))
-        return -1;
-    else
-        return index;
-}
-
-#endif /* HASHMAP_H_ */
+		
+    
+	
+} 
+ 
+/** 
+ * Insert a node in correct position 
+ */ 
+template<class Key, class Value, class HashFunc, class EqualKey> 
+void HashMap<Key, Value, HashFunc, EqualKey>::insert(const Key& hashKey, const Value& value) { 
+	if ( ( num_element + 1 ) > size * _loadingFactor ) 
+		table = rehash(size,table); 
+	// Calculate the hash value by calling HashFunc 
+	int index=HashFunc::hashCode(hashKey) % size; 
+	//if conflict, keep searching the key until find empty position. 
+	while ( table[index].removed == 0 ) { 
+		//If reach the end of the array, go to the first and continue 
+		if ( index == ( size - 1 ) ) 
+			index = 0; 
+		else 
+			index++; 
+	} 
+	//do the assignment 
+	table[index].value = value; 
+	table[index].key = hashKey; 
+	table[index].removed = 0; 
+	num_element++; 
+} 
+ 
+/** 
+ * Rehash 
+ */ 
+template<class Key, class Value, class HashFunc, class EqualKey> 
+KeyNode<Key,Value>* HashMap<Key, Value, HashFunc, EqualKey>::rehash(int old_size,KeyNode<Key,Value>*&) { 
+	int tmpkey; 
+	// find the updated size 
+	size = HashMapUtil::findNextPrimeNumber(old_size); 
+	//relocate a table for the map 
+	KeyNode<Key,Value> *tmp = new KeyNode<Key,Value>[size]; 
+	for ( int i = 0 ; i < old_size; i++ ) { 
+		if ( table[i].removed == 0 ) {             //this space is occupied 
+			//each node need to be inserted again 
+			tmpkey = HashFunc::hashCode(table[i].key) % size; 
+			while ( tmp[tmpkey].removed == 0 ) {	// conflict 
+				if ( tmpkey == ( size - 1 ) ) 
+					tmpkey = 0; 
+				else 
+					tmpkey++; 
+			} 
+		//find the right place and do the assignment 
+		tmp[tmpkey].value = table[i].value; 
+		tmp[tmpkey].key = table[i].key; 
+		tmp[tmpkey].removed = 0; 
+		} 
+	} 
+	//delete the old table 
+	delete []table; 
+	//return the new table 
+	return tmp; 
+} 
+ 
+/** 
+ * Clear the whole HashMap 
+ */ 
+template<class Key, class Value, class HashFunc, class EqualKey> 
+void HashMap<Key, Value, HashFunc, EqualKey>::clear() { 
+	int tmpsize = size; 
+	//Reset the size of array. 
+	size = HashMapUtil::findNextPrimeNumber(0); 
+	int i; 
+	for ( i = 0; i < size; i++ ) { 
+		// the first nodes clear by lazy delete -- removed = 1 
+		table[i].removed = 1; 
+	} 
+	for ( ; i < tmpsize; i++ ) 
+		// delete the next nodes 
+		delete table[i]; 
+	num_element = 0; 
+} 
+ 
+/** 
+ * Remove the node with assigned key 
+ */ 
+template<class Key, class Value, class HashFunc, class EqualKey> 
+bool HashMap<Key, Value, HashFunc, EqualKey>::remove(const Key& hashKey) { 
+	//Find the index of the key by calling findKey. 
+	int i = findKey(hashKey); 
+	if ( i != -1 ) 
+		//Remove the key by setting its remove flag. 
+		table[i].removed = 1; 
+	return  (i != -1);
+} 
+ 
+template<class Key, class Value, class HashFunc, class EqualKey> 
+int HashMap<Key, Value, HashFunc, EqualKey>::findKey(const Key& hashKey) { 
+	//Calculate the hash value by calling HashFunc 
+	int i = HashFunc::hashCode(hashKey) % size; 
+	while ( table[i].removed == 0 ) { 
+		//Find the pointer. 
+		if ( EqualKey::equals(table[i].key, hashKey) ) 
+			return i; 
+		//If reach the end of the array, go to the first and continue. 
+		if ( i == ( size-1 ) ) 
+			i = 0; 
+		else 
+			i++; 
+	} 
+	//if not found, return -1 
+	return -1; 
+} 
+ 
+ 
+/** 
+ * Overload operator[] and return the value of the hashKey 
+ */ 
+template<class Key, class Value, class HashFunc, class EqualKey> 
+Value& HashMap<Key, Value, HashFunc, EqualKey>::operator[](const Key& hashKey) { 
+	//Call the find function. 
+	return find(hashKey); 
+} 
+ 
+ 
+#endif /* HASHMAP_H_ */ 

@@ -10,8 +10,8 @@ LIB_OBJS =	Src/File.o  \
 	Src/unknown.o	\
 	Src/Crc.o	\
 	Src/Md5.o \
-       	Src/version.o \
-   	Src/PrintLog.o \
+	Src/version.o \
+	Src/PrintLog.o \
 	Src/ThreadPool.o\
 	Src/hash.o \
 	Src/random.o \
