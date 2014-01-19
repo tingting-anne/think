@@ -10,7 +10,7 @@ LIB_OBJS =	Src/File.o  \
 	Src/unknown.o	\
 	Src/Crc.o	\
 	Src/Md5.o \
-	Src/version.o \
+       	Src/version.o \
    	Src/PrintLog.o \
 	Src/ThreadPool.o\
 	Src/hash.o \
@@ -28,7 +28,8 @@ TEST_OBJS = Test/Test.o \
 	Test/TestComponent.o \
 	Test/hashring.o \
 	Test/test_bloom.o \
-	Test/test_btree.o 
+	Test/test_btree.o \
+	Test/test_hashmap.o
 
 					
 TEST_TARGET = $(BINDIR)/think
