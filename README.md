@@ -1,33 +1,33 @@
 think
-=====
-目前：
+============
+Introduction
 Basis Components，Infrastructure （C++基础库，包括线程，锁，信号量，内存管理等）
 
 Overview
 --------
-1. crc32 (done)
-2. md5  (done)
-3. hash,hashmap (done)
-4. time (done)
-5. maths (done)
-6. log  (done)
-7. thread(pool) (to test)
-8. rb-tree (to test)
-9. random (to test)
-10. version (done)
-11. compoent ([unknown.cpp] done)
-12. file (done)
-13. memory ([pool_allocator.cpp] done)
-14. template array (done)
-15. function (done)
-16. (h)list (open source ,done)
-17. mutex, sem , cond(done)
-18. byteorder (done)
-19. template msgqueue (done)
-20. atomic (done)
-21. bits operator (done)
-22. consistent hash 
-23. bloom filter 
+[Y] crc32 (done)
+[Y] md5  (done)
+[Y] hash, hashmap (done)
+[Y] time (done)
+[Y] maths (done)
+[Y] log  (done)
+[N] thread(pool) (to test)
+[N] rb-tree (to test)
+[N] random (to test)
+[Y] version (done)
+[Y] compoent ([unknown.cpp] done)
+[Y] file (done)
+[Y] memory ([pool_allocator.cpp] done)
+[Y] template array (done)
+[Y] function (done)
+[Y] (h)list (open source ,done)
+[Y] mutex, sem , cond(done)
+[Y] byteorder (done)
+[Y] template msgqueue (done)
+[Y] atomic (done)
+[Y] bits operator (done)
+[Y] consistent hash 
+[Y] bloom filter 
 
 
 Licence
@@ -42,7 +42,7 @@ feel free to submit bugs if you find them. If you have any question or feedback,
 please contact and join us, we appreciate your kindly contribution.
 
 Todo List
-1.unit test 
+1.unit test
 2.related documentation 
 
 
